@@ -1,0 +1,3 @@
+[submodule "yahoo_finance_api"]
+	path = yahoo_finance_api
+	url = git@github.com:xemwebe/yahoo_finance_api.git

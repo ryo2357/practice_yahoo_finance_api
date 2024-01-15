@@ -3,18 +3,17 @@ use std::time::{Duration, UNIX_EPOCH};
 use time::{macros::datetime, OffsetDateTime};
 use yahoo_finance_api as yahoo;
 
-#[tokio::main]
-async fn main() {
-    get_the_latest_available_quote().await;
-    get_history_of_quotes_for_given_time_period().await;
-    get_the_history_of_quotes_for_time_range().await;
-    search_for_a_ticker_given_a_search_string().await;
+fn main() {
+    // get_the_latest_available_quote();
+    // get_history_of_quotes_for_given_time_period();
+    // get_the_history_of_quotes_for_time_range();
+    search_for_a_ticker_given_a_search_string();
 }
 
 #[allow(dead_code)]
-async fn get_the_latest_available_quote() {
+fn get_the_latest_available_quote() {
     let provider = yahoo::YahooConnector::new();
-    let response = provider.get_latest_quotes("AAPL", "1d").await.unwrap();
+    let response = provider.get_latest_quotes("AAPL", "1d").unwrap();
     let quote = response.last_quote().unwrap();
     let time: OffsetDateTime =
         OffsetDateTime::from(UNIX_EPOCH + Duration::from_secs(quote.timestamp));
@@ -24,15 +23,12 @@ async fn get_the_latest_available_quote() {
 }
 
 #[allow(dead_code)]
-async fn get_history_of_quotes_for_given_time_period() {
+fn get_history_of_quotes_for_given_time_period() {
     let provider = yahoo::YahooConnector::new();
     let start = datetime!(2020-1-1 0:00:00.00 UTC);
     let end = datetime!(2020-1-31 23:59:59.99 UTC);
     // returns historic quotes with daily interval
-    let resp = provider
-        .get_quote_history("AAPL", start, end)
-        .await
-        .unwrap();
+    let resp = provider.get_quote_history("AAPL", start, end).unwrap();
     let quotes = resp.quotes().unwrap();
     println!("Apple's quotes in January: {:?}", quotes);
 
@@ -46,9 +42,9 @@ async fn get_history_of_quotes_for_given_time_period() {
      */
 }
 #[allow(dead_code)]
-async fn get_the_history_of_quotes_for_time_range() {
+fn get_the_history_of_quotes_for_time_range() {
     let provider = yahoo::YahooConnector::new();
-    let response = provider.get_quote_range("AAPL", "1d", "1mo").await.unwrap();
+    let response = provider.get_quote_range("AAPL", "1d", "1mo").unwrap();
     let quotes = response.quotes().unwrap();
     println!("Apple's quotes of the last month: {:?}", quotes);
     /*
@@ -61,10 +57,10 @@ async fn get_the_history_of_quotes_for_time_range() {
 }
 
 #[allow(dead_code)]
-async fn search_for_a_ticker_given_a_search_string() {
+fn search_for_a_ticker_given_a_search_string() {
     // 検索文字列(会社名など)を指定してティッカーを検索
     let provider = yahoo::YahooConnector::new();
-    let resp = provider.search_ticker("Apple").await.unwrap();
+    let resp = provider.search_ticker("Apple").unwrap();
 
     // 特に使ってない
     // let mut apple_found = false;
